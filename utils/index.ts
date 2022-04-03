@@ -5,33 +5,33 @@ export const SUFFIX = '.json';
 
 export function isNil(obj: any) {
     return obj === null || typeof obj === 'undefined';
-};
+}
 
 export function isEmpty(obj: any) {
     return obj === '' || isNil(obj);
-};
+}
 
 export function isObject(obj: any) {
     return obj != null && typeof obj === 'object';
-};
+}
 
 export function isArray(obj: any) {
     return Object.prototype.toString.call(obj) === '[object Array]';
-};
+}
 
 export function serializeQuery(obj: any) {
-    let qStr = "";
+    let qStr = '';
     if (!isObject(obj)) {
-        return qStr
+        return qStr;
     }
 
     const qArray = [] as string[];
     for (const p in obj) {
-        qArray.push(`${p}=${obj[p]}`)
+        qArray.push(`${p}=${obj[p]}`);
     }
 
     if (qArray.length > 0) {
-        qStr += `?${qArray.join('&')}`
+        qStr += `?${qArray.join('&')}`;
     }
 
     return qStr;
@@ -40,8 +40,8 @@ export function serializeQuery(obj: any) {
 const urlRegex = /^(https?:\/\/)/i;
 
 export function getThumbnail(thumb: string) {
-    if(isEmpty(thumb || !urlRegex.test(thumb))) {
-        return '/logos/subreddit.png'
+    if (isEmpty(thumb || !urlRegex.test(thumb))) {
+        return '/logos/subreddit.png';
     }
 
     return thumb;
