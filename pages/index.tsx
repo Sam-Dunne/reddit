@@ -1,4 +1,6 @@
 import type { NextPage, GetServerSideProps } from 'next';
+import Link from 'next/link';
+import { ArrowNarrowLeftIcon, ArrowNarrowRightIcon } from '@heroicons/react/solid';
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Navbar from '../components/navbar/navbar';
@@ -18,6 +20,7 @@ import {
 interface IProps {
     postRes: models.IRedditResponse;
     subreddit: string;
+    query: models.IRedditQueryParams;
 }
 
 const DEFAULT_POST_LIMIT = 10;
@@ -31,6 +34,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     if (isEmpty(query.limit)) {
         query.limit = DEFAULT_POST_LIMIT.toString();
+    }
+
+    if (isEmpty(query.count)) {
+        query.count = '0';
     }
 
     delete query.s;
@@ -49,20 +56,23 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         return {
             props: {
                 postRes: jres,
-                subreddit
+                subreddit,
+                query
             },
         };
     } catch (error) {
         return {
             props: {
                 postRes: null,
-                subreddit
+                subreddit,
+                query
             },
         };
     }
 };
 
-const Home: NextPage<IProps> = ({ postRes, subreddit }: IProps) => {
+
+const Home: NextPage<IProps> = ({ postRes, subreddit, query }: IProps) => {
     // const [posts, setPosts] = useState([] as models.IRedditPost[]);
     // const getPosts = async () => {
     //   try {
@@ -79,6 +89,44 @@ const Home: NextPage<IProps> = ({ postRes, subreddit }: IProps) => {
     //   getPosts();
     // }, [])
 
+    const limit = Number(query.limit);
+    const pdata = postRes?.data;
+    let after = pdata?.after;
+    let count = Number(query.count);
+
+    if (pdata?.dist > limit || pdata?.children?.length > limit) {
+        pdata.children = pdata?.children?.slice(0,limit);
+        const lastChild = pdata.children[limit -1];
+        after = `${lastChild?.kind}_${lastChild?.data?.id}`
+    }
+
+    const hasAfter = !isEmpty(after);
+    const hasBefore = !isEmpty(pdata?.before);
+    const hasSubR = !isEmpty(subreddit) && subreddit !== ALL_POSTS ? `/r/${subreddit}` : '';
+
+    if (!isEmpty(query.before)) {
+        count -= limit;
+    }
+
+    if (isEmpty(count) || count < 0) {
+        count = 0;
+    }
+
+    const bQuery: models.IGetRedditPosts = { count };
+    const aQuery: models.IGetRedditPosts = { count: count + limit };
+
+    if(hasSubR) {
+        bQuery.search = aQuery.search = subreddit;
+    }
+
+    if(hasBefore) {
+        bQuery.before = pdata.before;
+    }
+
+    if(hasAfter) {
+        aQuery.after = after;
+    }
+
     return (
         <div className={styles.container}>
             <Head>
@@ -93,9 +141,25 @@ const Home: NextPage<IProps> = ({ postRes, subreddit }: IProps) => {
             <div className="relative bg-gray-200 pt-24 lg:pt-28 pb-16 min-h-screen">
                 <main>
                     <div className='absolute top-20 text-xs w-full text-center font-bold'>
-                        <span>{!isEmpty(subreddit) && subreddit !== ALL_POSTS ? `/r/${subreddit}` : ''}</span>
+                        <span>{hasSubR ? `/r/${subreddit}` : ''}</span>
                     </div>
-                    <List posts={postRes?.data?.children} />
+                    <div className='max-w-2xl mx-auto pb-5'>
+                        <List posts={postRes?.data?.children} />
+                        <div className="flex justify-between text-sm text-gray-500 font-medium">
+                            <Link href={`/${serializeQuery(bQuery)}`}>
+                                <a className={`flex items-center justify-center ${isEmpty(bQuery.before) ? 'invisible' : ''}`}>
+                                    <ArrowNarrowLeftIcon className='h-5 mr-1 py-3' />
+                                    <span>Previous</span>
+                                </a>
+                            </Link>
+                            <Link href={`/${serializeQuery(aQuery)}`}>
+                                <a className={`flex items-center justify-center ${isEmpty(aQuery.after) ? 'invisible' : ''}`}>
+                                    <span>Next</span>
+                                    <ArrowNarrowRightIcon className='h-5 ml-1 py-3' />
+                                </a>
+                            </Link>
+                        </div>
+                    </div>
                 </main>
                 <Footer />
             </div>
