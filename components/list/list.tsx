@@ -27,7 +27,7 @@ export default function List({ posts }: IProps) {
                             href={
                                 isEmpty(pdata.permalink)
                                     ? BASE_URL
-                                    : pdata.permalink
+                                    : `${BASE_URL}${pdata.permalink}`
                             }
                             target="blank"
                             rel="noreferrer"

@@ -147,6 +147,20 @@ const Home: NextPage<IProps> = ({ postRes, subreddit, query }: IProps) => {
                         <span>{hasSubR ? `/r/${subreddit}` : ''}</span>
                     </div>
                     <div className='max-w-2xl mx-auto pb-5'>
+                        <div className="flex justify-between text-sm text-gray-500 font-medium">
+                            <Link href={`/${serializeQuery(bQuery)}`}>
+                                <a className={`flex items-center justify-center ${isEmpty(bQuery.before) ? 'invisible' : ''}`}>
+                                    <ArrowNarrowLeftIcon className='h-5 mr-1 py-3' />
+                                    <span>Previous</span>
+                                </a>
+                            </Link>
+                            <Link href={`/${serializeQuery(aQuery)}`}>
+                                <a className={`flex items-center justify-center ${isEmpty(aQuery.after) ? 'invisible' : ''}`}>
+                                    <span>Next</span>
+                                    <ArrowNarrowRightIcon className='h-5 ml-1 py-3' />
+                                </a>
+                            </Link>
+                        </div>
                         <List posts={postRes?.data?.children} />
                         <div className="flex justify-between text-sm text-gray-500 font-medium">
                             <Link href={`/${serializeQuery(bQuery)}`}>
