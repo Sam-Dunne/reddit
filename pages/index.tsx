@@ -141,9 +141,9 @@ const Home: NextPage<IProps> = ({ postRes, subreddit, query }: IProps) => {
                 <link rel="manifest" href="/favicon/site.webmanifest"></link>
             </Head>
             <Navbar />
-            <div className="relative bg-gray-200 pt-24 lg:pt-28 pb-16 min-h-screen">
+            <div className="relative bg-gray-200 pt-12 lg:pt-24 pb-16 min-h-screen">
                 <main>
-                    <div className='absolute top-20 text-xs w-full text-center font-bold'>
+                    <div className='absolute top-12 text-xs w-full text-center font-bold'>
                         <span>{hasSubR ? `/r/${subreddit}` : ''}</span>
                     </div>
                     <div className='max-w-2xl mx-auto pb-5'>
