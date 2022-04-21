@@ -36,7 +36,7 @@ export default function List({ posts }: IProps) {
                                 <img
                                     className="h-10"
                                     src={getThumbnail(pdata.thumbnail)}
-                                    alt="Post Thumbnail Image"
+                                    alt="Thumb Image"
                                 />
                             </div>
                             <div className="flex-1 min-w-0">

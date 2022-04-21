@@ -141,12 +141,12 @@ const Home: NextPage<IProps> = ({ postRes, subreddit, query }: IProps) => {
                 <link rel="manifest" href="/favicon/site.webmanifest"></link>
             </Head>
             <Navbar />
-            <div className="relative bg-gray-200 pt-12 lg:pt-24 pb-16 min-h-screen">
+            <div className="relative bg-gray-200 pt-8 lg:pt-24 pb-16 min-h-screen">
                 <main>
                     <div className='absolute top-12 text-xs w-full text-center font-bold'>
                         <span>{hasSubR ? `/r/${subreddit}` : ''}</span>
                     </div>
-                    <div className='max-w-2xl mx-auto pb-5'>
+                    <div className='max-w-2xl mx-auto pb-5 px-4 mb-4'>
                         <div className="flex justify-between text-sm text-gray-500 font-medium">
                             <Link href={`/${serializeQuery(bQuery)}`}>
                                 <a className={`flex items-center justify-center ${isEmpty(bQuery.before) ? 'invisible' : ''}`}>
