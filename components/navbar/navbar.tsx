@@ -21,7 +21,7 @@ export default function Navbar() {
                 <div className="relative h-16 flex justify-around px-2">
                     <div className="relative z-10 px-2 flex lg:px-0">
                         <div className="flex-shrink-0 flex items-center">
-                            <a target='blank' href='https://sub-reddit-g022714zd-sam-dunne.vercel.app/' rel='noopener noreferrer'>
+                            <a target='blank' href='https://sub-reddit-self.vercel.app/' rel='noopener noreferrer'>
                                 <img
                                     className="block h-8 w-auto"
                                     src="/logos/subreddit.png"
